@@ -1,10 +1,21 @@
 {% extends "base/base.html" %}
 {%load static%}
+{%load humanize%}
 {% block content %}
 {% include "base/navbar.html" %}
-<section class="section-content padding-y bg">
-    <div class="container">
 
+<section class="section-content padding-y bg">
+  <div class="container">
+    <div class="row">
+        <div class="col-md-12 text-right" >
+            <p style="margin-bottom: 0px;">A bit confused about price? </p>
+            <p class="text-success" style="margin-top: 0px; margin-bottom: 2px;">Predict is using our Accurate AI Price Predictor</p>
+            <a href="{% url 'predict' %}"><button class="btn btn-success">Predict Price Now</button></a>
+        </div>
+    </div>
+    <br>
+</div> <!-- container //  -->
+    <div class="container">
         <!-- ============================ COMPONENT 1 ================================= -->
         <div class="card">
             <div class="row no-gutters">
@@ -19,38 +30,89 @@
                 <main class="col-md-6 border-left">
                 <form method="GET" action="{% url 'add_cart' single_product.id %}">
                     <article class="content-body">
-                        <h2 class="title">{{single_product.product_name}}</h2>
+                        <h2 class="title">{{single_product.product_name}} </h2>
+                        <div class="rating">
+                          <span>
+                            <i class="fa fa-star{%if single_product.averageRating < 0.5 %}-o {%elif single_product.averageRating >= 0.5 and single_product.averageRating < 1 %}-half-o {%endif%}" aria-hidden="true"></i>
+                            <i class="fa fa-star{%if single_product.averageRating < 1.5 %}-o {%elif single_product.averageRating >= 1.5 and single_product.averageRating < 2 %}-half-o {%endif%}" aria-hidden="true"></i>
+                            <i class="fa fa-star{%if single_product.averageRating < 2.5 %}-o {%elif single_product.averageRating >= 2.5 and single_product.averageRating < 3 %}-half-o {%endif%}" aria-hidden="true"></i>
+                            <i class="fa fa-star{%if single_product.averageRating < 3.5 %}-o {%elif single_product.averageRating >= 3.5 and single_product.averageRating < 4 %}-half-o {%endif%}" aria-hidden="true"></i>
+                            <i class="fa fa-star{%if single_product.averageRating < 4.5 %}-o {%elif single_product.averageRating >= 4.5 and single_product.averageRating < 5 %}-half-o {%endif%}" aria-hidden="true"></i>
+                          </span>
+                          &nbsp;&nbsp{{single_product.averageRating}} Stars
+                        </div>
+                        <br>
                         <div class="mb-3">
-                            <var class="price h4">PKR {{single_product.price}}</var>
+                            <var class="price h4">PKR {{single_product.price|stringformat:".2f"|intcomma}}</var>
                         </div>
                         <p>
-                            {{single_product.description}}
+
+                            <!-- Assuming 'single_product.description' contains the text you want to truncate -->
+
+                            {% if single_product.description %}
+                            {% if single_product.description|length > 100 %}
+                              <div class="truncated-text">
+                                {{ single_product.description|truncatechars:100 }}
+                                <a href="#" class="read-more-link" onclick="read_more()">Read More</a>
+                              </div>
+                              <div class="full-text" style="display: none;">
+                                {{ single_product.description }}
+                                <a href="#" class="read-more-link" onclick="read_less()">Read Less</a>
+                              </div>
+                            {% else %}
+                              {{ single_product.description }}
+                            {% endif %}
+                            {% endif %}
+                    
                         </p>
                         <hr>
-                        <div class="row">
-                            <div class="item-option-select">
-                                <h6>Choose Color</h6>
-                                <select name="color" id="" class="form-control">
-                                    <option value="red">Red</option>
-                                    <option value="yellow">Yellow</option>
-                                    <option value="green">Green</option>
-                                </select>
-                            </div>
-                        </div> <!-- row.// -->
-                        <div class="row">
-                            <div class="item-option-select">
-                                <h6>Select Size</h6>
-                                
-                                <select name="size" id="" class="form-control">
 
-                                    <option value="small">Small</option>
-                                    <option value="medium">Medium</option>
-                                    <option value="large">Large</option>
+                        <p>
+                            <div class="row">
+                                <dt class="col-6">Type</dt>
+                                <dd class="col-6">{{single_product.category.category_name}}</dd>
 
-                                </select>
+                                <dt class="col-6">RAM</dt>
+                                <dd class="col-6">{{single_product.ram}}GB</dd>
 
-                            </div>
-                        </div> <!-- row.// -->
+                                <dt class="col-6">Storage</dt>
+                                <dd class="col-6">{{single_product.storage}}</dd>
+
+                                <dt class="col-6">Processor:</dt>
+                                <dd class="col-6">{{single_product.processer}}</dd>
+                    
+                                <dt class="col-6">GPU</dt>
+                                <dd class="col-6">{{single_product.GPU}}</dd>
+                    
+                                <dt class="col-6">Screen Resolution</dt>
+                                <dd class="col-6">{{single_product.resolution}}</dd>
+                    
+                                <dt class="col-6">Operating System</dt>
+                                <dd class="col-6">{{single_product.OS}}</dd>
+
+                                <dt class="col-6">Weight</dt>
+                                <dd class="col-6">{{single_product.weight}}KGs</dd>
+
+                                <dt class="col-6">Touch Screen</dt>
+                    
+                                {% if single_product.touchscreen %}
+                                <dd class="col-6">Yes</dd>
+                                {% else %}
+                                <dd class="col-6">No</dd>
+                                {% endif %}
+                    
+                                <dt class="col-6">IPS Panel</dt>
+                                {% if single_product.IPS %}
+                                <dd class="col-6">Yes</dd>
+                                {% else %}
+                                <dd class="col-6">No</dd>
+                                {% endif %}
+
+                    
+                              </div>
+                        </p>
+                        
+                        
                         <hr>
                         {% if single_product.stock <= 0 %}
                         <span class="text out_of_stock" >Out of Stock</span>
@@ -73,38 +135,143 @@
         <!-- ============================ COMPONENT 1 END .// ================================= -->
         <br>
         <div class="row">
-            <div class="col-md-9">
+            <div class="col-md-6">
 
+                {%include 'base/alerts.html' %}
+                <form action="{% url 'submit_review' single_product.id %}" method="post">
+                  {% csrf_token %}
+                  <h4>Write a Review</h4>
+                  <br>
+                  How do you rate this product?
+                  <br>
+                  <div class="rate">
+                    <input type="radio" name="rating" id="rating10" value='5' required/><label for="rating10" title="5"></label>
+                    <input type="radio" name="rating" id="rating9" value='4.5' required/><label for="rating9" title="4.5" class="half"></label>
+                    <input type="radio" name="rating" id="rating8" value='4' required/><label for="rating8" title="4"></label>
+                    <input type="radio" name="rating" id="rating7" value='3.5' required/><label for="rating7" title="3.5" class="half"></label>
+                    <input type="radio" name="rating" id="rating6" value='3' required/><label for="rating6" title="3"></label>
+                    <input type="radio" name="rating" id="rating5" value='2.5' required/><label for="rating5" title="2.5" class="half"></label>
+                    <input type="radio" name="rating" id="rating4" value='2' required/><label for="rating4" title="2"></label>
+                    <input type="radio" name="rating" id="rating3" value='1.5' required/><label for="rating3" title="1.5" class="half"></label>
+                    <input type="radio" name="rating" id="rating2" value='1' required/><label for="rating2" title="1"></label>
+                    <input type="radio" name="rating" id="rating1" value='0.5' required/><label for="rating1" title="0.5" class="half"></label>
+                  </div>
+                  <br>
+                  <h5>Subject:</h5>
+                  <input type="text" name="subject" class="form-control">
+                  <br>
+                  <h5>Review:</h5>
+                  <textarea name="review" class="form-control" style="height: 100px;"></textarea>
+                  <br>
+                  {% if user.is_authenticated %}
+                    {% if ordered %}
+                    <button type="submit" class="btn btn-primary">Submit</button>
+                    {% else %}
+                    <u><strong><p style="font-size: 15px;">You must purchase this product to post a review.</p></strong></u>
+                    {%endif%}
+                  {% else %}
+                  <p>You Must be logged in to Submit a review.  <a href="{% url 'login' %}">Login</a></p> &nbsp; &nbsp;
+                  {%endif%}
+                  <br>
+                </form>
+                <br>
                 <header class="section-heading">
-                    <h3>Customer Reviews </h3>
-
+                  <h2>Customer Reviews </h2>
                 </header>
-
+                {% for review in reviews %}
                 <article class="box mb-3">
                     <div class="icontext w-100">
-                        <img src="./images/avatars/avatar1.jpg" class="img-xs icon rounded-circle">
+                        <img src="{%static 'images/profile_logo.png' %}" class="img-xs icon rounded-circle">
                         <div class="text">
-                            <span class="date text-muted float-md-right">24.04.2020 </span>
-                            <h6 class="mb-1">Mike John </h6>
-
+                            <span class="date text-muted float-md-right">{{review.created_at}} </span>
+                            <h6 class="mb-1">{{review.user.first_name}} {{review.user.last_name}} </h6>
+                            <div>
+                              <span>
+                                <i class="fa fa-star{%if review.rating == 0.5 %}-half-o {%elif review.rating < 1%}-o {%endif%}" aria-hidden="true"></i>
+                                <i class="fa fa-star{%if review.rating == 1.5 %}-half-o {%elif review.rating < 2%}-o {%endif%}" aria-hidden="true"></i>
+                                <i class="fa fa-star{%if review.rating == 2.5 %}-half-o {%elif review.rating < 3%}-o {%endif%}" aria-hidden="true"></i>
+                                <i class="fa fa-star{%if review.rating == 3.5 %}-half-o {%elif review.rating < 4%}-o {%endif%}" aria-hidden="true"></i>
+                                <i class="fa fa-star{%if review.rating == 4.5 %}-half-o {%elif review.rating < 5%}-o {%endif%}" aria-hidden="true"></i>
+                              </span>
+                            </div>
                         </div>
                     </div> <!-- icontext.// -->
                     <div class="mt-3">
                         <p>
-                            Dummy comment Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
-                            tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
-                            quis nostrud exercitation ullamco laboris nisi ut aliquip
+                            {{review.review}}
                         </p>
                     </div>
                 </article>
-
+                {% endfor %}
 
 
             </div> <!-- col.// -->
+            <div class="col-md-6">
+              <h4>Recommended Products</h4>
+              <br>
+              <div class="row align-center">
+                {% for product in recomm %}
+                <div class="col-md-6">
+                <figure class="card card-product-grid">
+                    <div class="img-wrap"> 
+                        <a href="{{product.get_url}}"><img src="{{product.product_images.first.image.url}}"></a>
+                    </div> <!-- img-wrap.// -->
+                    <figcaption class="info-wrap">
+                        <div class="">
+                            <a href="{{product.get_url}}" class="title">{{product.product_name}}</a>
+                            <div class="price-wrap mt-2">
+                                <span class="price">PKR {{product.price|stringformat:"d"|intcomma}}</span>
+                                <!-- <del class="price-old">$1980</del> -->
+                            </div> <!-- price-wrap.// -->
+                        </div>
+                    </figcaption>
+                </figure>
+                </div>
+                {% endfor %}
+              </div>
+            </div>
         </div> <!-- row.// -->
     </div> <!-- container .//  -->
 </section>
 
+<script>
+    function read_more() {
+      const truncatedElements = document.getElementsByClassName('truncated-text');
+      for (const element of truncatedElements) {
+        element.style.display = 'none';
+      }
+      const fullTextElements = document.getElementsByClassName('full-text');
+      for (const element of fullTextElements) {
+        element.style.display = 'block';
+      }
+    }
+    
+    function read_less() {
+      const fullTextElements = document.getElementsByClassName('full-text');
+      for (const element of fullTextElements) {
+        element.style.display = 'none';
+      }
+      const truncatedElements = document.getElementsByClassName('truncated-text');
+      for (const element of truncatedElements) {
+        element.style.display = 'block';
+      }
+    }
+    
+    // Add event listeners when the DOM is ready
+    document.addEventListener('DOMContentLoaded', function() {
+      const readMoreLinks = document.querySelectorAll('.read-more-link');
+      for (const link of readMoreLinks) {
+        link.addEventListener('click', function(event) {
+          event.preventDefault(); // Prevent default link behavior
+          if (link.textContent === 'Read More') {
+            read_more();
+          } else {
+            read_less();
+          }
+        });
+      }
+    });
+</script>
 <style>
 
 .out_of_stock{
@@ -122,7 +289,10 @@
     color: white;
     border: 1px solid red;
 }
-
+.rating i{
+  color: #ffb503;
+  font-size: 25px;
+}
 </style>
 {% include "base/footer.html" %}
 {% endblock content %}

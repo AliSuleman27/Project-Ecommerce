@@ -1,0 +1,70 @@
+
+{% extends "base/base.html" %}
+{% load static %}
+{%block content%}
+
+    {% include "base/navbar.html" %}
+
+    
+    <section class="section-conten padding-y bg">
+        {%include 'base/alerts.html' %}
+        <div class="container">
+            <div class="row">
+            <aside class="col-md-3">
+                <!--   SIDEBAR   -->
+                <ul class="list-group">
+                    <a class="list-group-item active" href="{% url 'dashboard' %}"> Dashboard </a>
+                    <a class="list-group-item" href="{% url 'my_orders' %}"> My Orders </a>
+                    <a class="list-group-item" href="{% url 'change_password' %}"> Change Password </a>
+                    <a class="list-group-item" href="#"> Edit Profile </a>
+                </ul>
+                <br>
+                <a class="btn btn-light btn-block" href="{% url 'logout' %}"> <i class="fa fa-power-off"></i> <span class="text">Log out</span> </a> 
+                <!--   SIDEBAR .//END   -->
+            </aside>
+            <main class="col-md-9">
+                <article class="card">
+                <header class="card-header">
+                    <strong class="d-inline-block mr-3">Username </strong>
+                    <span>{{user.username}}</span>
+                </header>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-6" style="text-align: center;"">
+                            <div class="card bg-primary text-white" >
+                                <div class="card-body">
+                                    <div class="card-title">Total Orders</div>
+                                    <h4>{{order_count}}</h4>
+                                    <u><a href="{% url 'my_orders' %}" style="color: white; font-size: 12px;">View Orders</a></u>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6" style="text-align: center;">
+                            <div class="card bg-primary text-white">
+                                <div class="card-body" >
+                                    <img src="{% static 'images/profile_logo.png' %}" height="35" width="35">
+                                    <p>
+                                        {{user.first_name}} {{user.last_name}} 
+                                        <br>
+                                        {{user.email}} 
+                                        <br> 
+                                        {{user.phone_number}}
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                </article>
+            </main>
+        </div> <!-- row.// -->
+        </div>
+        
+        
+    </section>
+        
+
+ 
+    {% include "base/footer.html" %}
+
+{%endblock content%}

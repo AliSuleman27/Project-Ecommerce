@@ -37,10 +37,12 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'django.contrib.humanize',
     'accounts',
     'carts',
     'category',
-    'store'
+    'store',
+    'orders'
 ]
 
 MIDDLEWARE = [
@@ -67,13 +69,16 @@ TEMPLATES = [
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
                 'category.context_processors.menu_links',
-                'carts.context_processors.counter'
+                'carts.context_processors.counter',
+                'store.context_processors.ram_types',
+                'store.context_processors.company_types',
             ],
         },
     },
 ]
 
 WSGI_APPLICATION = 'ecomm.wsgi.application'
+AUTH_USER_MODEL  = 'accounts.Account'
 
 
 # Database
@@ -127,9 +132,17 @@ STATICFILES_DIRS = [
     'ecomm/static',
 ]
 
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_PORT = 587
+EMAIL_HOST_USER = 'techtonics94@gmail.com'
+EMAIL_HOST_PASSWORD = 'mvfo xsnw jbev sshh'
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_USE_TLS = True
+
+
+
 MEDIA_URL = '/media/'
 MEDIA_ROOT = BASE_DIR /'media'
-
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.0/ref/settings/#default-auto-field

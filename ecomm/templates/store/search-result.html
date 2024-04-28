@@ -126,8 +126,9 @@
     
     <header class="border-bottom mb-4 pb-3">
             <div class="form-inline">
-                <span class="mr-md-auto">{{results}} Items found </span>
-                
+                {% if results>0 %}
+                <span class="mr-md-auto">{{results}} Search Items Found </span>
+                {%endif%}
             </div>
     </header><!-- sect-heading -->
     

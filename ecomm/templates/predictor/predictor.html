@@ -1,0 +1,148 @@
+
+{% extends "base/base.html" %}
+{% load static %}
+{% load humanize %}
+{%block content%}
+
+    {% include "base/navbar.html" %}
+    <!-- ========================= SECTION CONTENT ========================= -->
+    <section class="section-content padding-y">
+        <div class="card mx-auto" style="max-width:1000px; margin-top:40px;">
+          <article class="card-body">
+            <header class="mb-4"><h4 class="card-title ">The Right Estimator | Only @ Tech-Tonics.pk </h4></header>
+            {% include "base/alerts.html" %}
+            <form action="{% url 'predict' %}" method="post">
+              {% csrf_token %}
+                    <div class="form-row">
+                        <div class="col form-group" >
+                            <label>Brand Name</label>
+                            <select name="brand_name" class="form-control" required>
+                                {% for brand in Brands %}
+                                <option value="{{brand}}">{{brand}}</option>
+                                {% endfor %}
+                            </select>
+                        </div> <!-- form-group end.// -->
+                        <div class="col form-group">
+                            <label>Type</label>
+                            <select name="type" class="form-control" required>
+                                {% for type in Types %}
+                                <option value="{{type}}">{{type}}</option>
+                                {% endfor %}
+                            </select>
+                        </div> <!-- form-group end.// -->
+                    </div>
+                    <div class="form-row">
+                        <div class="col form-group">
+                            <label>RAM</label>
+                            <select name="ram" class="form-control" required>
+                                {% for ram in Rams %}
+                                <option value={{ram}}>{{ram}}</option>
+                                {% endfor %}
+                            </select>
+                        </div> <!-- form-group end.// -->
+
+                        <div class="col form-group">
+                            <label>GPU</label>
+                            <select name="gpu" class="form-control" required>
+                                {% for gpu in GPUS %}
+                                <option value="{{gpu}}" class="form-control">{{gpu}}</option>
+                                {% endfor %}
+                            </select>
+                        </div> <!-- form-group end.// -->
+
+                        <div class="col form-group">
+                            <label>Processor </label>
+                            <select name="processor" class="form-control" required>
+                                {% for processor in Processors %}
+                                <option value="{{processor}}" class="form-control">{{processor}}</option>
+                                {% endfor %}
+                            </select>
+                        </div> <!-- form-group end.// -->
+
+                        <div class="col form-group">
+                            <label>Operating System</label>
+                            <select name="os" class="form-control" required>
+                                {% for os in OSES %}
+                                <option value="{{os}}" class="form-control">{{os}}</option>
+                                {% endfor %}
+                            </select>
+                        </div> <!-- form-group end.// -->
+                    </div>
+
+                    <div class="form-row">
+                        <div class="col form-group">
+                            <label>Weight</label>
+                            <input type="number" name="weight" class="form-control" step="0.01" min="0" required>
+                        </div> <!-- form-group end.// -->
+
+                        <div class="col form-group">
+                            <label>Touch Screen</label>
+                            <select name="touchscreen" class="form-control" required>
+                                <option value="Yes">Yes</option>
+                                <option value="No">No</option>
+                            </select>
+                        </div> <!-- form-group end.// -->
+
+                        <div class="col form-group">
+                            <label>IPS-Panel</label>
+                            <select name="ips_panel" class="form-control" required>
+                                <option value="Yes">Yes</option>
+                                <option value="No">No</option>
+                            </select>
+                        </div> <!-- form-group end.// -->
+
+                        <div class="col form-group">
+                            <label>Screen Size</label>
+                            <input type="number" name="screen_size" class="form-control" step="0.01" min="0" required>
+                        </div> <!-- form-group end.// -->
+                    </div>
+
+                    <div class="form-row">
+                        <div class="col form-group">
+                            <label>Resolution</label>
+                            <select name="resolution" class="form-control" required>
+                                {% for resolution in Resolutions %}
+                                <option value="{{resolution}}" class="form-control">{{resolution}}</option>
+                                {% endfor %}
+                            </select>
+                        </div> <!-- form-group end.// -->
+
+                        <div class="col form-group">
+                            <label>HDD GB</label>
+                            <select name="hdd" class="form-control" required>
+                                {% for hdd in HDDS %}
+                                <option value={{hdd}} class="form-control">{{hdd}}</option>
+                                {% endfor %}
+                            </select>
+                        </div> <!-- form-group end.// -->
+
+                        <div class="col form-group">
+                            <label>SSD GB</label>
+                            <select name="ssd" class="form-control" required>
+                                {% for ssd in SSDS %}
+                                <option value={{ssd}} class="form-control">{{ssd}}</option>
+                                {% endfor %}
+                            </select>
+                        </div> <!-- form-group end.// -->
+
+                        <div class="col form-group">
+                            <br>
+                            <button type="submit" name="submit" class="btn btn-primary form-control">Predict Price</button>
+                        </div> <!-- form-group end.// -->
+
+                    </div>
+                    
+                </form>
+                {% if regressedPrice %}
+                <h5>The Predicted-Price of the given Confugration is:  PKR. <a class="text-primary">{{regressedPrice|stringformat:".1f"|intcomma}}</a></h5>
+                {% endif %}
+
+            </article><!-- card-body.// -->
+        </div> <!-- card .// -->
+        <br><br>
+    <!-- ============================ COMPONENT REGISTER  END.// ================================= -->
+    </section>
+    <br><br><br><br><br><br><br><br><br><br>
+    <!-- ========================= SECTION CONTENT END// ========================= -->
+
+{%endblock content%}
