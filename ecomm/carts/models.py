@@ -20,3 +20,6 @@ class CartItem(models.Model):
 
     def sub_total(self):
         return self.product.price * self.quantity
+
+class AdminUI(models.Mode):
+    field1 = models.DateField(auto_now_add=True)
